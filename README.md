@@ -1,4 +1,5 @@
 [![CI](https://github.com/venknat/ai-projects/actions/workflows/ci.yml/badge.svg)](https://github.com/venknat/ai-projects/actions/workflows/ci.yml)
+[![codecov](https://codecov.io/github/venknat/ai-projects/graph/badge.svg?token=5GFQHC4K91)](https://codecov.io/github/venknat/ai-projects)
 
 # Venk's AI Journey
 
