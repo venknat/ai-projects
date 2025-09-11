@@ -37,3 +37,9 @@ jobs:
       run: |
         # Add src to PYTHONPATH for imports
         PYTHONPATH=src pytest -v --cov=src
+
+    # Step 5: Upload code coverage
+    - name: Upload coverage reports to Codecov
+      uses: codecov/codecov-action@v5
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
