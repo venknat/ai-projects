@@ -1,3 +1,5 @@
+[![CI](https://github.com/venknat/ai-projects/actions/workflows/ci.yml/badge.svg)](https://github.com/venknat/ai-projects/actions/workflows/ci.yml)
+
 # Venk's AI Journey
 
 This is a repository including my journey to getting more experience with ML/AI.  Starting from
