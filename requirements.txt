@@ -1,4 +1,4 @@
-fastai==2.8.4
+ipython==8.12.3
 pytest==8.4.1
-torch==2.7.1 # noqa
-torchmetrics==1.8.1
+torch==2.5.1
+torchmetrics==1.2.1

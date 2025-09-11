@@ -8,6 +8,8 @@ import torch
 import torch.nn as nn
 import torchmetrics
 
+from ._single_step_trainer import _SingleStepTrainer
+
 from torch.utils.data import DataLoader
 from IPython.display import clear_output
 from torch.optim import Optimizer
@@ -58,17 +60,16 @@ class SimpleTrainer:
         for epoch in range(1, num_epochs + 1):
             if metric is not None:
                 metric.reset()
-            for iteration_num, (examples, labels) in enumerate(training_data):
-                optimizer.zero_grad()
-                examples = examples.view(examples.shape[0], -1)
-                preds = model(examples)
-                loss = criterion(preds, labels)
-                metric.update(preds, labels)
-                loss.backward()
-                optimizer.step()
-                if per_batch_callbacks is not None:
-                    for cb in per_batch_callbacks:
-                        cb()
+            for examples, labels in training_data:
+                _SingleStepTrainer.train(
+                    optimizer,
+                    examples,
+                    labels,
+                    model,
+                    criterion,
+                    metric,
+                    per_batch_callbacks,
+                )
 
             train_loss = 0.0
             # After each epoch, output losses.  TODO: Add in accuracy.
