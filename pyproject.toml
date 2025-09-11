@@ -1,0 +1,22 @@
+[tool.isort]
+profile = "black"
+line_length = 88
+known_first_party = ["ai-projects"]
+
+[project]
+name = "myml"
+version = "0.1.0"
+description = "Reusable ML utilities and experiments"
+authors = [
+  { name="Your Name", email="you@example.com" }
+]
+readme = "README.md"
+requires-python = ">=3.9"
+dependencies = [
+  "torch",
+  "torchmetrics",
+  "matplotlib",
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]

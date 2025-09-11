@@ -1,0 +1,4 @@
+fastai==2.8.4
+pytest==8.4.1
+torch==2.7.1 # noqa
+torchmetrics==1.8.1
