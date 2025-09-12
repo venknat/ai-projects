@@ -7,13 +7,12 @@ from torch import nn
 import torch
 from torch.utils.data import DataLoader, TensorDataset
 
-from pytorch_util._single_step_trainer import _SingleStepTrainer
 from pytorch_util.simple_trainer import SimpleTrainer
 
 
 class TestSimpleTrainer:
     def test_simple_trainer(self):
-        num_epochs = 5
+        num_epochs = 6
         num_batches = 8
         batch_callback1 = Mock()
         batch_callback2 = Mock()
