@@ -28,6 +28,7 @@ class SimpleTrainer:
 
     @staticmethod
     def train(
+        device: torch.device,
         model: nn.Module,
         training_data: DataLoader,
         optimizer: Optimizer,
@@ -70,6 +71,7 @@ class SimpleTrainer:
                 metric.reset()
             for examples, labels in training_data:
                 _SingleStepTrainer.train(
+                    device,
                     optimizer,
                     examples,
                     labels,
@@ -79,7 +81,7 @@ class SimpleTrainer:
                 )
 
             (train_loss, metric_val) = ModelUtil.evaluate_model(
-                training_data, model, criterion, metric
+                device, training_data, model, criterion, metric
             )
             result["losses"].append(train_loss)
             result["metrics"].append(metric_val)
