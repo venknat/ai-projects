@@ -12,6 +12,7 @@ class _SingleStepTrainer:
 
     @staticmethod
     def train(
+        device: torch.device,
         optimizer: Optimizer,
         training_xs: torch.Tensor,
         training_ys: torch.Tensor,
@@ -20,6 +21,8 @@ class _SingleStepTrainer:
         per_batch_callbacks: List[Callable],
     ):
         optimizer.zero_grad()
+        training_xs = training_xs.to(device=device)
+        training_ys = training_ys.to(device=device)
         training_xs = training_xs.view(training_xs.shape[0], -1)
         preds = model(training_xs)
         loss = criterion(preds, training_ys)

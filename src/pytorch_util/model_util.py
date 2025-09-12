@@ -13,6 +13,7 @@ ModelResult = namedtuple("TrainResult", ["loss", "metric"])
 class ModelUtil:
     @staticmethod
     def evaluate_model(
+        device: torch.device,
         data: DataLoader,
         model: nn.Module,
         criterion: nn.Module,
@@ -22,6 +23,8 @@ class ModelUtil:
         metric_val = None if metric is None else 0.0
         with torch.no_grad():
             for examples, labels in data:
+                examples = examples.to(device=device)
+                labels = labels.to(device=device)
                 examples = examples.view(examples.shape[0], -1)
                 preds = model(examples)
                 if criterion is not None:
