@@ -2,7 +2,7 @@
 
 """A utility to train a model with specified parameters."""
 
-from typing import Final, List, Callable
+from typing import Final, List, Callable, Dict
 
 import torch
 import torch.nn as nn
@@ -13,6 +13,8 @@ from ._single_step_trainer import _SingleStepTrainer
 from torch.utils.data import DataLoader
 from IPython.display import clear_output
 from torch.optim import Optimizer
+
+from .model_util import ModelUtil
 
 
 # TODO: Make this more generalizable as I start doing cross-validation, etc, as well as allow
@@ -34,8 +36,9 @@ class SimpleTrainer:
         metric: torchmetrics.Metric = None,
         per_batch_callbacks: List[Callable] = None,
         per_epoch_callbacks: List[Callable] = None,
+        print_progress: bool = False,
         live_plot: bool = False,
-    ) -> List[float]:
+    ) -> Dict[str, List[float]]:
         """
 
         Args:
@@ -45,17 +48,22 @@ class SimpleTrainer:
             criterion: nn.Module: The loss function
             num_epochs: int: The number of epochs to train for
             metric: torchmetrics.Metric: The metric used for computing metrics. Optional
+            per_batch_callbacks: List[Callable]: Optional code to be run with each batch
+            per_epoch_callbacks: List[Callable]: Optional code to be run after each epoch
+            print_progress: whether to print progress during training
             live_plot: boolean: whether to live-plot data as training is done.  Intended for use
                        in notebooks only.
         Returns:
-            TBD
+            A Dictionary with keys "losses" giving the loss after each epoch, and "metrics" giving the
+            computed metrics after each epoch.
         """
-        print("Training...")
         last_messages = []
         window: Final = 5
         best_loss = float("inf")
         best_model_state = None
-        losses = []
+        result = {"losses": []}
+        if metric is not None:
+            result["metrics"] = []
 
         for epoch in range(1, num_epochs + 1):
             if metric is not None:
@@ -67,31 +75,32 @@ class SimpleTrainer:
                     labels,
                     model,
                     criterion,
-                    metric,
                     per_batch_callbacks,
                 )
 
             train_loss = 0.0
             # After each epoch, output losses.  TODO: Add in accuracy.
-            with torch.no_grad():
-                for examples, labels in training_data:
-                    examples = examples.view(examples.shape[0], -1)
-                    preds = model(examples)
-                    train_loss += criterion(preds, labels).item() * examples.size(0)
+            (train_loss, metric_val) = ModelUtil.evaluate_model(
+                training_data, model, criterion, metric
+            )
 
-            train_loss /= len(training_data.dataset)
-            losses.append(train_loss)
+            result["losses"].append(train_loss)
+            result["metrics"].append(metric_val)
+
             if train_loss < best_loss:
                 best_model_state = model.state_dict()
                 best_loss = train_loss
-            last_messages.append(
-                f"Epoch {epoch}: loss: {train_loss}, accuracy: {metric.compute()}"
-            )
-            if len(last_messages) > window:
-                last_messages.pop(0)
-            clear_output(wait=True)
-            print("\n".join(last_messages), flush=True)
+
+            if print_progress:
+                # TODO: We should say something more descriptive than "metric"
+                last_messages.append(
+                    f"Epoch {epoch}: loss: {train_loss}, metric: {metric.compute()}"
+                )
+                if len(last_messages) > window:
+                    last_messages.pop(0)
+                clear_output(wait=True)
+                print("\n".join(last_messages), flush=True)
             if per_epoch_callbacks is not None:
                 for cb in per_epoch_callbacks:
                     cb()
-        return losses
+        return result

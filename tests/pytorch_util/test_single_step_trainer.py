@@ -21,7 +21,6 @@ class TestSingleStepTrainer:
             nn.Linear(image_shape[1] * image_shape[2], num_classes),
         )
         optimizer = torch.optim.Adam(model.parameters(), lr=0.01)
-        metric = torchmetrics.Accuracy(task="multiclass", num_classes=num_classes)
 
         callback1 = Mock()
         callback2 = Mock()
@@ -30,7 +29,7 @@ class TestSingleStepTrainer:
         labels = torch.randint(0, num_classes, (batch_size,))
 
         _SingleStepTrainer.train(
-            optimizer, images, labels, model, criterion, metric, [callback1, callback2]
+            optimizer, images, labels, model, criterion, [callback1, callback2]
         )
         callback1.assert_called_once()
         callback2.assert_called_once()

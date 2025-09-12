@@ -17,14 +17,12 @@ class _SingleStepTrainer:
         training_ys: torch.Tensor,
         model: nn.Module,
         criterion: nn.Module,
-        metric: torchmetrics.Metric,
         per_batch_callbacks: List[Callable],
     ):
         optimizer.zero_grad()
         training_xs = training_xs.view(training_xs.shape[0], -1)
         preds = model(training_xs)
         loss = criterion(preds, training_ys)
-        metric.update(preds, training_ys)
         loss.backward()
         optimizer.step()
         if per_batch_callbacks is not None:
