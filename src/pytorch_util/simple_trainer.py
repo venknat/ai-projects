@@ -78,12 +78,9 @@ class SimpleTrainer:
                     per_batch_callbacks,
                 )
 
-            train_loss = 0.0
-            # After each epoch, output losses.  TODO: Add in accuracy.
             (train_loss, metric_val) = ModelUtil.evaluate_model(
                 training_data, model, criterion, metric
             )
-
             result["losses"].append(train_loss)
             result["metrics"].append(metric_val)
 
