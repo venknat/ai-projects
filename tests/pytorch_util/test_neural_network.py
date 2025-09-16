@@ -7,12 +7,13 @@ import torchmetrics
 from torch import nn
 from torch.utils.data import DataLoader, TensorDataset
 
+from pytorch_util.neural_network import NeuralNetwork
 from pytorch_util.simple_trainer import SimpleTrainer
 
 
-class TestSimpleTrainer:
+class TestNeuralNetwork:
     @pytest.mark.parametrize("use_gpu", [True, False])
-    def test_simple_trainer(self, use_gpu):
+    def test_neural_network(self, use_gpu):
         num_epochs = 6
         num_batches = 8
         batch_callback1 = Mock()
@@ -54,8 +55,10 @@ class TestSimpleTrainer:
         batch_size = 4
         num_classes = 10
         image_shape = (1, 28, 28)
-        model = nn.Sequential(
-            nn.Linear(image_shape[1] * image_shape[2], num_classes),
+        model = NeuralNetwork(
+            input_shape=image_shape,
+            num_output_classes=10,
+            hidden_layer_sizes=[256, 512, 256],
         ).to(device=device)
         images = torch.rand(batch_size * num_batches, *image_shape)
         labels = torch.randint(0, num_classes, (batch_size * num_batches,))

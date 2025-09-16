@@ -1,9 +1,9 @@
-from typing import NamedTuple
-from collections import namedtuple
+import math
+from collections import OrderedDict, namedtuple
+from typing import List, Union
 
 import torch
 import torchmetrics
-
 from torch import nn
 from torch.utils.data import DataLoader
 
@@ -19,6 +19,17 @@ class ModelUtil:
         criterion: nn.Module,
         metric: torchmetrics.Metric,
     ) -> ModelResult:
+        """
+        Evaluates a model on the given loss and metric on the given labeled data.
+
+        Args:
+            device: the device on which the entities are (needed to know where to move the
+            underlying data to.
+            data: the data to evaluate
+            model: the model to evaluate
+            criterion: the loss function
+            metric: the metric
+        """
         loss = None if criterion is None else 0.0
         metric_val = None if metric is None else 0.0
         with torch.no_grad():

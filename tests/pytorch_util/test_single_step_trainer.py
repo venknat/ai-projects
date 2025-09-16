@@ -1,16 +1,13 @@
-import pytest
-
-# Example function in your src/myml/utils.py (replace with real code later)
-
-import torch
-import torch.nn as nn
-import torchmetrics
-
-import test_util
-
 from unittest.mock import Mock
 
+import pytest
+import test_util
+import torch
+import torch.nn as nn
+
 from pytorch_util._single_step_trainer import _SingleStepTrainer
+
+# Example function in your src/myml/utils.py (replace with real code later)
 
 
 class TestSingleStepTrainer:

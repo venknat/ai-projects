@@ -1,9 +1,8 @@
-from typing import Final, List, Callable
+from typing import Callable, Final, List
 
 import torch
 import torch.nn as nn
 import torchmetrics
-
 from torch.optim import Optimizer
 
 
