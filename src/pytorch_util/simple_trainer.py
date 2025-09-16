@@ -2,18 +2,16 @@
 
 """A utility to train a model with specified parameters."""
 
-from typing import Final, List, Callable, Dict
+from typing import Callable, Dict, Final, List
 
 import torch
 import torch.nn as nn
 import torchmetrics
-
-from ._single_step_trainer import _SingleStepTrainer
-
-from torch.utils.data import DataLoader
 from IPython.display import clear_output
 from torch.optim import Optimizer
+from torch.utils.data import DataLoader
 
+from ._single_step_trainer import _SingleStepTrainer
 from .model_util import ModelUtil
 
 
@@ -22,10 +20,6 @@ from .model_util import ModelUtil
 #
 # There are many undesirable restrictions here:
 class SimpleTrainer:
-    """A utility to train a sequential model with specified parameters.  Note that this does not
-    attempt to do cross-validation or hyperparameter searching.  This is simply meant to be a
-    reusable training loop."""
-
     @staticmethod
     def train(
         device: torch.device,
@@ -41,6 +35,9 @@ class SimpleTrainer:
         live_plot: bool = False,
     ) -> Dict[str, List[float]]:
         """
+        A utility to train a sequential model with specified parameters.  Note that this does not
+        attempt to do cross-validation or hyperparameter searching.  This is simply meant to be a
+        reusable training loop.
 
         Args:
             model: nn.Module: The underlying model to train on
@@ -53,7 +50,7 @@ class SimpleTrainer:
             per_epoch_callbacks: List[Callable]: Optional code to be run after each epoch
             print_progress: whether to print progress during training
             live_plot: boolean: whether to live-plot data as training is done.  Intended for use
-                       in notebooks only.
+                        in notebooks only.
         Returns:
             A Dictionary with keys "losses" giving the loss after each epoch, and "metrics" giving the
             computed metrics after each epoch.
@@ -83,6 +80,7 @@ class SimpleTrainer:
             (train_loss, metric_val) = ModelUtil.evaluate_model(
                 device, training_data, model, criterion, metric
             )
+
             result["losses"].append(train_loss)
             result["metrics"].append(metric_val)
 

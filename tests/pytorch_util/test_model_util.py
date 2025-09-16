@@ -1,16 +1,14 @@
 import pytest
-import torchmetrics
-
-from torch import nn
+import test_util
 import torch
+import torchmetrics
+from torch import nn
 from torch.utils.data import DataLoader, TensorDataset
 
 from pytorch_util.model_util import ModelUtil
-import test_util
 
 
 class TestModelUtil:
-
     @pytest.mark.parametrize("use_gpu", [True, False])
     def test_evaluate_model(self, use_gpu):
         device, dataloader, model, criterion, metric = TestModelUtil._setup_test_params(
