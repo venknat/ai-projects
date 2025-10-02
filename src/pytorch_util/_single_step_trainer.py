@@ -22,7 +22,7 @@ class _SingleStepTrainer:
         optimizer.zero_grad()
         training_xs = training_xs.to(device=device)
         training_ys = training_ys.to(device=device)
-        training_xs = training_xs.view(training_xs.shape[0], -1)
+        # training_xs = training_xs.view(training_xs.shape[0], -1)
         preds = model(training_xs)
         loss = criterion(preds, training_ys)
         loss.backward()

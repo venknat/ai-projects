@@ -19,6 +19,7 @@ class TestSingleStepTrainer:
         criterion = nn.CrossEntropyLoss()
         device = test_util.get_available_gpu() if use_gpu else torch.device("cpu")
         model = nn.Sequential(
+            nn.Flatten(),
             nn.Linear(image_shape[1] * image_shape[2], num_classes),
         ).to(device=device)
         optimizer = torch.optim.Adam(model.parameters(), lr=0.01)

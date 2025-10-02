@@ -32,11 +32,14 @@ class ModelUtil:
         """
         loss = None if criterion is None else 0.0
         metric_val = None if metric is None else 0.0
+        model.eval()
+        if metric is not None:
+            metric.reset()
         with torch.no_grad():
             for examples, labels in data:
                 examples = examples.to(device=device)
                 labels = labels.to(device=device)
-                examples = examples.view(examples.shape[0], -1)
+                # examples = examples.view(examples.shape[0], -1)
                 preds = model(examples)
                 if criterion is not None:
                     loss += criterion(preds, labels).item() * examples.size(0)
@@ -46,5 +49,5 @@ class ModelUtil:
             loss /= len(data.dataset)
         if metric is not None:
             metric_val = metric.compute()
-
+        model.train()
         return ModelResult(loss=loss, metric=metric_val)

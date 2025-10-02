@@ -17,7 +17,10 @@ class NeuralNetwork(nn.Module):
         but will be flattened.  Very limited knobs are provided: just the number of hidden layers
         (inferred from hidden_layer_sizes) and the number of nodes in each.
 
-        Hidden layers will have a relu activation, except the final output will be softmax.
+        Hidden layers will have a relu activation, except for the final linear layer.
+
+        The resulting network is intended to be used with CrossEntropyLoss, thus it is not
+        recommended to add Softmax to the end.
 
         TODO: provide regularization options in a simple way.
         """
@@ -42,10 +45,8 @@ class NeuralNetwork(nn.Module):
         d[linear_label] = nn.Linear(
             in_features=layer_in_size, out_features=num_output_classes
         )
-        d["softmax"] = nn.Softmax(dim=1)
         self._neural_network = nn.Sequential(d)
         self._num_output_classes = num_output_classes
-        print(self._neural_network)
 
     # For compatibility with common training loops.  DO NOT CALL DIRECTLY
     def forward(self, x):

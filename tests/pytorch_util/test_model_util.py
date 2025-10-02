@@ -51,6 +51,7 @@ class TestModelUtil:
         num_classes = 10
         image_shape = (1, 28, 28)
         model = nn.Sequential(
+            nn.Flatten(),
             nn.Linear(image_shape[1] * image_shape[2], num_classes),
         ).to(device=device)
         images = torch.rand(batch_size, *image_shape)
